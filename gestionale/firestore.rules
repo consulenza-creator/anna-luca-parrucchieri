@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Prenotazioni: chiunque può crearne una nuova dal sito pubblico
+    // (prenota.html), ma solo Anna e Luca autenticati possono leggerle,
+    // modificarle (cambio stato) o cancellarle dal gestionale.
+    match /prenotazioni/{id} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Prodotti: solo il gestionale (autenticato) legge e scrive.
+    match /prodotti/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Ferie: il sito pubblico deve poterle leggere per calcolare gli
+    // slot disponibili, ma solo Anna e Luca possono modificarle.
+    match /ferie/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

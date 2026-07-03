@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3F3D39">
+<title>Prenota | Anna & Luca Parrucchieri</title>
+<meta name="description" content="Prenota online il tuo appuntamento da Anna & Luca Parrucchieri a Lecce: scegli i servizi, il nostro assistente ti propone le date libere.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- SVG SPRITE -->
+<svg style="display:none">
+  <symbol id="ic-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" class="filled" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-fb" viewBox="0 0 24 24"><path d="M14 21v-7.5h2.5l.4-3H14V8.4c0-.87.24-1.46 1.5-1.46H17V3.86C16.7 3.82 15.8 3.7 14.8 3.7c-2.2 0-3.7 1.34-3.7 3.8V10.5H8.6v3H11V21h3z" class="filled" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10 21 3 14 3 4.6c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></symbol>
+  <symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 6.5l8 6 8-6"/></symbol>
+  <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="ic-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></symbol>
+
+  <!-- AVATAR ANNA -->
+  <symbol id="av-anna" viewBox="0 0 60 60">
+    <circle cx="30" cy="30" r="30" fill="url(#gAnna)"/>
+    <text x="30" y="39" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#fff">A</text>
+  </symbol>
+  <!-- AVATAR LUCA -->
+  <symbol id="av-luca" viewBox="0 0 60 60">
+    <circle cx="30" cy="30" r="30" fill="url(#gLuca)"/>
+    <text x="30" y="39" text-anchor="middle" font-family="Poppins, sans-serif" font-size="22" font-weight="700" fill="#fff">L</text>
+  </symbol>
+  <linearGradient id="gAnna" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#EFA679"/><stop offset="1" stop-color="#E17F43"/>
+  </linearGradient>
+  <linearGradient id="gLuca" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#3F3D39"/><stop offset="1" stop-color="#2E5B52"/>
+  </linearGradient>
+</svg>
+
+<header class="site">
+  <div class="nav-wrap">
+    <a href="index.html" class="nav-brand">
+      <span class="mono-badge"><span class="lm">A</span><span class="amp">&amp;</span><span class="lm">L</span></span>
+      <span>Anna &amp; Luca<small>Parrucchieri, Lecce</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="chi-siamo.html">Chi Siamo</a>
+      <a href="servizi.html">Servizi</a>
+      <a href="contatti.html">Contatti</a>
+      <a href="prenota.html" class="cta active">Prenota</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="prenota.html" class="btn primary">Prenota</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero container" style="padding-bottom:10px;">
+    <span class="eyebrow">Prenotazione guidata</span>
+    <h1 class="section-title">Prenota il tuo appuntamento</h1>
+    <p class="lead">Scegli i trattamenti che desideri: penseremo noi a calcolare la durata e a proporti le prime date disponibili con Anna o Luca.</p>
+  </section>
+
+  <section style="padding-top:10px;">
+    <div class="container booking-wrap">
+
+      <div class="steps-nav" id="stepsNav"></div>
+
+      <!-- STEP 1: SERVIZI -->
+      <div class="bstep" id="bstep1">
+        <span class="bstep-label">Passo 1</span>
+        <h2 class="mt-0" style="font-size:20px;">Che servizio vuoi fare?</h2>
+        <div class="b-services" id="serviceList"></div>
+
+        <span class="bstep-label" style="margin-top:20px;display:block;">Passo 2</span>
+        <h3 style="margin-top:4px;font-size:16px;">Preferenza operatore</h3>
+        <div class="b-staff-choice" id="staffChoice">
+          <div class="b-chip active" data-staff="Indifferente">Il primo disponibile</div>
+          <div class="b-chip" data-staff="Anna"><svg class="mini-avatar"><use href="#av-anna"/></svg> Anna</div>
+          <div class="b-chip" data-staff="Luca"><svg class="mini-avatar"><use href="#av-luca"/></svg> Luca</div>
+        </div>
+
+        <div class="b-summary-bar" id="summaryBar1">
+          <span>Nessun servizio selezionato</span><span></span>
+        </div>
+        <div class="b-actions">
+          <button class="btn primary block" id="toStep2" disabled>Vedi le date disponibili →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: ASSISTENTE + SLOT -->
+      <div class="bstep hidden" id="bstep2">
+        <span class="bstep-label">Passo 3</span>
+        <h2 class="mt-0" style="font-size:20px;">Scegli il giorno che preferisci</h2>
+        <div class="b-assistant">
+          <svg class="mini-avatar" width="34" height="34" id="assistantAvatar"><use href="#av-anna"/></svg>
+          <div class="b-bubble" id="assistantMsg"></div>
+        </div>
+        <div id="slotsContainer"></div>
+        <div class="b-actions split">
+          <button class="btn outline" id="backTo1">← Modifica</button>
+          <button class="btn primary" id="loadMoreDays">Mostra altre date</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: RIEPILOGO + ACCONTO -->
+      <div class="bstep hidden" id="bstep3">
+        <span class="bstep-label">Passo 4</span>
+        <h2 class="mt-0" style="font-size:20px;">Riepilogo prenotazione</h2>
+        <div id="recap"></div>
+        <div class="b-policy" id="policyText"></div>
+        <div class="b-actions split">
+          <button class="btn outline" id="backTo2">← Cambia data</button>
+          <button class="btn primary" id="toStep4">Blocca il 20% e conferma →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: DATI CLIENTE + NOTE + CARTA (MOCKUP) -->
+      <div class="bstep hidden" id="bstep4">
+        <span class="bstep-label">Passo 5</span>
+        <h2 class="mt-0" style="font-size:20px;">I tuoi dati</h2>
+        <p style="font-size:13.5px;">Servono ad Anna e Luca per riconoscerti e contattarti in caso di necessità.</p>
+        <div class="form-grid">
+          <div class="form-row-2">
+            <div>
+              <label>Nome e cognome *</label>
+              <input type="text" id="custName" placeholder="Il tuo nome" autocomplete="name" required>
+            </div>
+            <div>
+              <label>Telefono *</label>
+              <input type="tel" id="custPhone" placeholder="333 1234567" autocomplete="tel" required>
+            </div>
+          </div>
+          <div>
+            <label>Email (opzionale)</label>
+            <input type="email" id="custEmail" placeholder="tuo@email.it" autocomplete="email">
+          </div>
+          <div>
+            <label>Note per Anna e Luca (opzionale)</label>
+            <textarea id="custNotes" rows="3" placeholder="Es. allergie, richieste particolari, riferimenti sul colore desiderato..."></textarea>
+          </div>
+        </div>
+
+        <h2 style="font-size:20px;margin-top:26px;">Blocco cauzionale sulla carta</h2>
+        <p style="font-size:13.5px;">Verrà solo <b>autorizzato</b> l'importo dell'acconto: nessun addebito reale finché l'appuntamento non viene rispettato secondo policy.</p>
+        <div class="form-grid">
+          <div class="form-row-2">
+            <div style="grid-column:1/-1;">
+              <label>Nome sulla carta</label>
+              <input type="text" id="cardName" placeholder="Mario Rossi" autocomplete="cc-name">
+            </div>
+          </div>
+          <div>
+            <label>Numero carta</label>
+            <input type="text" inputmode="numeric" id="cardNumber" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="cc-number">
+          </div>
+          <div class="form-row-2">
+            <div>
+              <label>Scadenza</label>
+              <input type="text" inputmode="numeric" id="cardExp" placeholder="MM/AA" maxlength="5" autocomplete="cc-exp">
+            </div>
+            <div>
+              <label>CVC</label>
+              <input type="text" inputmode="numeric" id="cardCvc" placeholder="123" maxlength="3" autocomplete="cc-csc">
+            </div>
+          </div>
+        </div>
+        <div class="b-disclaimer">Prototipo dimostrativo: i dati carta non vengono inviati né salvati. L'integrazione reale userà Stripe (PaymentIntent con cattura manuale) per l'autorizzazione carta. Nome, telefono, email e note vengono invece davvero inviati al gestionale del salone alla conferma.</div>
+        <div class="b-actions split">
+          <button class="btn outline" id="backTo3">← Indietro</button>
+          <button class="btn primary" id="toStep5">Conferma appuntamento</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: CONFERMA -->
+      <div class="bstep hidden" id="bstep5">
+        <div class="b-confirm">
+          <div class="b-confirm-avatars">
+            <svg class="mini-avatar" width="46" height="46"><use href="#av-anna"/></svg>
+            <svg class="mini-avatar" width="46" height="46"><use href="#av-luca"/></svg>
+          </div>
+          <div class="b-check"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M4 12l6 6L20 6"/></svg></div>
+          <h2 style="font-size:20px;">Appuntamento confermato!</h2>
+          <p id="confirmText" style="font-size:14px;"></p>
+          <div class="b-cal-actions">
+            <button class="btn primary" id="addGoogleCal"><svg class="icon" style="vertical-align:-3px;margin-right:6px;"><use href="#ic-cal"/></svg>Aggiungi a Google Calendar</button>
+            <button class="btn outline" id="downloadIcs"><svg class="icon" style="vertical-align:-3px;margin-right:6px;"><use href="#ic-download"/></svg>Scarica invito (.ics)</button>
+          </div>
+          <p style="margin-top:26px;font-size:13.5px;">Ti aspettiamo! Seguici intanto sui social:</p>
+          <div class="icon-links" style="justify-content:center;">
+            <a class="icon-btn" style="border-color:var(--line);color:var(--charcoal);" href="https://www.instagram.com/anna_e_luca_parrucchieri/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#ic-ig"/></svg></a>
+            <a class="icon-btn" style="border-color:var(--line);color:var(--charcoal);" href="https://www.facebook.com/anna.parrucchieri/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#ic-fb"/></svg></a>
+            <a class="icon-btn" style="border-color:var(--line);color:var(--charcoal);" href="tel:+390832302148" aria-label="Chiama"><svg class="icon"><use href="#ic-phone"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="foot-grid">
+    <div>
+      <span class="mono-badge" style="margin-bottom:10px;"><span class="lm">A</span><span class="amp">&amp;</span><span class="lm">L</span></span>
+      <h4 style="margin-top:14px;">Anna &amp; Luca Parrucchieri</h4>
+      <p style="color:#cfc8bd;font-size:14px;">Viale Lo Re 20, 73100 Lecce (LE)<br>Mar–Sab 9:00–18:00</p>
+      <div class="icon-links">
+        <a class="icon-btn" href="https://www.instagram.com/anna_e_luca_parrucchieri/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#ic-ig"/></svg></a>
+        <a class="icon-btn" href="https://www.facebook.com/anna.parrucchieri/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#ic-fb"/></svg></a>
+        <a class="icon-btn" href="tel:+390832302148" aria-label="Chiama"><svg class="icon"><use href="#ic-phone"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>Naviga</h4>
+      <a href="index.html">Home</a>
+      <a href="chi-siamo.html">Chi Siamo</a>
+      <a href="servizi.html">Servizi</a>
+      <a href="prenota.html">Prenota</a>
+      <a href="contatti.html">Contatti</a>
+    </div>
+    <div>
+      <h4>Contatti</h4>
+      <a href="tel:+390832302148">0832 30 21 48</a>
+      <a href="mailto:annalucaparrucchieri@hotmail.it">annalucaparrucchieri@hotmail.it</a>
+    </div>
+  </div>
+  <div class="foot-bottom">© 2026 Anna &amp; Luca Parrucchieri — Lecce. Tutti i diritti riservati. Prenotatore: prototipo dimostrativo, disponibilità simulata.</div>
+</footer>
+
+<script src="assets/nav.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/prenotatore.js" defer></script>
+</body>
+</html>

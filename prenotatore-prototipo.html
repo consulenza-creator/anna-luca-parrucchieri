@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#211B16">
+<title>Anna & Luca Parrucchieri | Prenota il tuo appuntamento</title>
+<style>
+  :root{
+    --cream:#FBF7F1;
+    --dark:#211B16;
+    --dark2:#2E251E;
+    --gold:#C98A3E;
+    --gold-l:#E8AE6C;
+    --line:#EAE0D2;
+    --ok:#4C7A5C;
+    --err:#B4544A;
+    --safe-b:env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;font-size:16px;}
+  h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:normal;margin:0 0 6px;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+
+  /* ---- ICONS ---- */
+  .icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .icon.filled{fill:currentColor;stroke:none;}
+
+  /* ---- HEADER ---- */
+  header{position:sticky;top:0;z-index:60;background:rgba(251,247,241,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+  .brand{display:flex;align-items:center;gap:8px;font-size:16px;letter-spacing:.5px;}
+  .brand .mono{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold-l),var(--gold));color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:14px;flex-shrink:0;}
+  .brand b{font-weight:600;}
+  .icon-links{display:flex;gap:8px;}
+  .icon-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--dark);text-decoration:none;transition:.15s;flex-shrink:0;}
+  .icon-btn:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
+  .icon-btn .icon{width:16px;height:16px;}
+
+  main{max-width:640px;margin:0 auto;padding:20px 14px 40px;}
+  .hero{text-align:center;margin-bottom:22px;padding:0 4px;}
+  .hero .eyebrow{font-size:11.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+  .hero h1{font-size:clamp(22px,6vw,30px);}
+  .hero p{color:#6b5f52;max-width:440px;margin:8px auto 0;font-size:14.5px;line-height:1.5;}
+  .hero-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px;font-size:12.5px;color:#8a7c6c;}
+  .hero-meta span{border:1px solid var(--line);border-radius:20px;padding:5px 12px;display:flex;align-items:center;gap:5px;}
+  .hero-meta .icon{width:13px;height:13px;}
+
+  .steps-nav{display:flex;gap:6px;justify-content:center;margin-bottom:18px;}
+  .steps-nav span{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.2s;}
+  .steps-nav span.active{background:var(--gold);width:18px;border-radius:4px;}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;box-shadow:0 3px 14px rgba(43,36,32,.05);}
+  .step-label{display:inline-block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;font-weight:600;}
+
+  /* ---- SERVIZI ---- */
+  .services{display:grid;gap:9px;margin-top:12px;}
+  .service{display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;cursor:pointer;transition:.15s;min-height:52px;}
+  .service.selected{border-color:var(--gold);background:#FCF3E7;}
+  .service .name{font-size:15px;font-weight:500;}
+  .service .meta{font-size:12.5px;color:#8a7c6c;margin-top:1px;}
+  .service .price{font-weight:700;font-size:15px;color:var(--dark);}
+  .service .check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;margin-left:10px;display:flex;align-items:center;justify-content:center;}
+  .service.selected .check{background:var(--gold);border-color:var(--gold);}
+  .service.selected .check svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;}
+  .service-row{display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
+
+  .staff-choice{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .chip{border:1.5px solid var(--line);border-radius:14px;padding:9px 12px;cursor:pointer;font-size:13.5px;display:flex;align-items:center;gap:7px;flex:1;min-width:100px;justify-content:center;transition:.15s;}
+  .chip.active{background:var(--dark);color:#fff;border-color:var(--dark);}
+  .chip .mini-avatar{width:22px;height:22px;flex-shrink:0;}
+
+  .summary-bar{display:flex;justify-content:space-between;align-items:center;background:var(--dark);color:#fff;border-radius:14px;padding:13px 16px;margin-top:14px;font-size:13.5px;gap:10px;}
+  .summary-bar b{color:var(--gold-l);white-space:nowrap;}
+
+  /* ---- BUTTONS ---- */
+  .btn{background:var(--dark);color:#fff;border:none;border-radius:26px;padding:14px 24px;font-size:15px;cursor:pointer;transition:.15s;min-height:48px;width:100%;font-weight:600;}
+  .btn:active{transform:scale(.98);}
+  .btn:disabled{background:#d8cfc1;color:#fff;cursor:not-allowed;}
+  .btn-outline{background:transparent;color:var(--dark);border:1.5px solid var(--dark);}
+  .actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+  .actions.split{flex-direction:row;}
+  .actions.split .btn-outline{width:auto;flex:0 0 auto;padding:14px 18px;}
+  .actions.split .btn:not(.btn-outline){flex:1;}
+
+  /* ---- ASSISTENTE ---- */
+  .assistant{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;}
+  .assistant .avatar-wrap{flex-shrink:0;}
+  .bubble{background:#F4EDE3;border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:14px;line-height:1.55;}
+  .day-group{margin-top:16px;}
+  .day-group h4{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:#8a7c6c;margin:0 0 8px;font-weight:600;}
+  .slots{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .slot{border:1.5px solid var(--line);border-radius:12px;padding:10px 8px;font-size:14px;cursor:pointer;background:#fff;display:flex;align-items:center;gap:8px;min-height:48px;}
+  .slot:active{transform:scale(.98);}
+  .slot.chosen{background:var(--gold);color:#fff;border-color:var(--gold);}
+  .slot .mini-avatar{width:24px;height:24px;flex-shrink:0;}
+  .slot .txt{display:flex;flex-direction:column;line-height:1.25;}
+  .slot .txt b{font-size:14.5px;}
+  .slot .txt small{font-size:11px;color:#8a7c6c;}
+  .slot.chosen .txt small{color:#fff;opacity:.85;}
+
+  /* ---- AVATAR SVG ---- */
+  .mini-avatar{border-radius:50%;}
+
+  .row{display:flex;justify-content:space-between;padding:7px 0;font-size:14px;gap:10px;}
+  .row span:first-child{color:#6b5f52;}
+  .row.total{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-size:16px;font-weight:700;}
+  .policy{background:#FCF3E7;border-left:3px solid var(--gold);padding:12px 14px;border-radius:8px;font-size:13px;line-height:1.55;margin-top:14px;}
+
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+  .form-grid label{display:block;font-size:11.5px;color:#8a7c6c;margin-bottom:4px;font-weight:600;}
+  .form-grid input{width:100%;padding:12px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;}
+  .full{grid-column:1/-1;}
+  .disclaimer{font-size:11.5px;color:#a99e90;margin-top:10px;line-height:1.5;}
+
+  .confirm-box{text-align:center;padding:6px 0;}
+  .confirm-avatars{display:flex;justify-content:center;gap:-10px;margin-bottom:10px;}
+  .confirm-avatars .mini-avatar{width:46px;height:46px;margin:0 -8px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+  .confirm-box .check{width:44px;height:44px;border-radius:50%;background:var(--ok);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+  .cal-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+
+  footer{border-top:1px solid var(--line);padding:26px 16px calc(26px + var(--safe-b));text-align:center;font-size:13px;color:#8a7c6c;}
+  footer .fname{font-family:Georgia,serif;font-size:17px;color:var(--dark);margin-bottom:4px;}
+  footer .icon-links{justify-content:center;margin:14px 0;}
+  footer .meta-line{margin:2px 0;}
+
+  .hidden{display:none;}
+
+  @media (min-width:600px){
+    main{padding:36px 20px 60px;}
+    .card{padding:26px;}
+    .slots{grid-template-columns:repeat(3,1fr);}
+    .actions{flex-direction:row;justify-content:flex-end;}
+    .actions .btn{width:auto;min-width:220px;}
+    .actions.split{justify-content:space-between;}
+    .cal-actions{flex-direction:row;justify-content:center;}
+    .cal-actions .btn{width:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG SPRITE -->
+<svg style="display:none">
+  <symbol id="ic-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" class="filled" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-fb" viewBox="0 0 24 24"><path d="M14 21v-7.5h2.5l.4-3H14V8.4c0-.87.24-1.46 1.5-1.46H17V3.86C16.7 3.82 15.8 3.7 14.8 3.7c-2.2 0-3.7 1.34-3.7 3.8V10.5H8.6v3H11V21h3z" class="filled" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10 21 3 14 3 4.6c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></symbol>
+  <symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 6.5l8 6 8-6"/></symbol>
+  <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></symbol>
+  <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="ic-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></symbol>
+
+  <!-- AVATAR ANNA -->
+  <symbol id="av-anna" viewBox="0 0 60 60">
+    <circle cx="30" cy="30" r="30" fill="url(#gAnna)"/>
+    <text x="30" y="39" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#fff">A</text>
+    <path d="M14 46c2-8 7-11 16-11s14 3 16 11" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>
+  </symbol>
+  <!-- AVATAR LUCA -->
+  <symbol id="av-luca" viewBox="0 0 60 60">
+    <circle cx="30" cy="30" r="30" fill="url(#gLuca)"/>
+    <text x="30" y="39" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#fff">L</text>
+    <path d="M14 46c2-8 7-11 16-11s14 3 16 11" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>
+  </symbol>
+  <linearGradient id="gAnna" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#E8AE6C"/><stop offset="1" stop-color="#C98A3E"/>
+  </linearGradient>
+  <linearGradient id="gLuca" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#3B322A"/><stop offset="1" stop-color="#211B16"/>
+  </linearGradient>
+</svg>
+
+<header>
+  <div class="brand">
+    <div class="mono">A&amp;L</div>
+    <div><b>Anna &amp; Luca</b><br><span style="font-size:11px;color:#8a7c6c;">Parrucchieri, Lecce</span></div>
+  </div>
+  <div class="icon-links">
+    <a class="icon-btn" href="https://www.instagram.com/anna_e_luca_parrucchieri/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#ic-ig"/></svg></a>
+    <a class="icon-btn" href="https://www.facebook.com/anna.parrucchieri/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#ic-fb"/></svg></a>
+    <a class="icon-btn" href="tel:+390832302148" aria-label="Chiama"><svg class="icon"><use href="#ic-phone"/></svg></a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="eyebrow">Prenotazione guidata</div>
+    <h1>Prenota il tuo appuntamento</h1>
+    <p>Scegli i trattamenti che desideri: penseremo noi a calcolare la durata e a proporti le prime date disponibili con Anna o Luca.</p>
+    <div class="hero-meta">
+      <span><svg class="icon"><use href="#ic-pin"/></svg> Viale Lo Re 20, Lecce</span>
+      <span><svg class="icon"><use href="#ic-clock"/></svg> Mar–Sab 9:00–18:00</span>
+    </div>
+  </div>
+
+  <div class="steps-nav" id="stepsNav"></div>
+
+  <!-- STEP 1: SERVIZI -->
+  <section class="card" id="step1">
+    <span class="step-label">Passo 1</span>
+    <h2>Che servizio vuoi fare?</h2>
+    <div class="services" id="serviceList"></div>
+
+    <span class="step-label" style="margin-top:20px;display:block;">Passo 2</span>
+    <h3 style="margin-top:4px;">Preferenza operatore</h3>
+    <div class="staff-choice" id="staffChoice">
+      <div class="chip active" data-staff="Indifferente">Il primo disponibile</div>
+      <div class="chip" data-staff="Anna"><svg class="mini-avatar"><use href="#av-anna"/></svg> Anna</div>
+      <div class="chip" data-staff="Luca"><svg class="mini-avatar"><use href="#av-luca"/></svg> Luca</div>
+    </div>
+
+    <div class="summary-bar" id="summaryBar1">
+      <span>Nessun servizio selezionato</span><span></span>
+    </div>
+    <div class="actions">
+      <button class="btn" id="toStep2" disabled>Vedi le date disponibili →</button>
+    </div>
+  </section>
+
+  <!-- STEP 2: ASSISTENTE + SLOT -->
+  <section class="card hidden" id="step2">
+    <span class="step-label">Passo 3</span>
+    <h2>Scegli il giorno che preferisci</h2>
+    <div class="assistant">
+      <div class="avatar-wrap"><svg class="mini-avatar" width="34" height="34" id="assistantAvatar"><use href="#av-anna"/></svg></div>
+      <div class="bubble" id="assistantMsg"></div>
+    </div>
+    <div id="slotsContainer"></div>
+    <div class="actions split">
+      <button class="btn-outline btn" id="backTo1">← Modifica</button>
+      <button class="btn" id="loadMoreDays">Mostra altre date</button>
+    </div>
+  </section>
+
+  <!-- STEP 3: RIEPILOGO + ACCONTO -->
+  <section class="card hidden" id="step3">
+    <span class="step-label">Passo 4</span>
+    <h2>Riepilogo prenotazione</h2>
+    <div id="recap"></div>
+    <div class="policy" id="policyText"></div>
+    <div class="actions split">
+      <button class="btn-outline btn" id="backTo2">← Cambia data</button>
+      <button class="btn" id="toStep4">Blocca il 20% e conferma →</button>
+    </div>
+  </section>
+
+  <!-- STEP 4: CARTA (MOCKUP) -->
+  <section class="card hidden" id="step4">
+    <span class="step-label">Passo 5</span>
+    <h2>Blocco cauzionale sulla carta</h2>
+    <p style="font-size:13.5px;color:#6b5f52;">Verrà solo <b>autorizzato</b> l'importo dell'acconto: nessun addebito reale finché l'appuntamento non viene rispettato secondo policy.</p>
+    <div class="form-grid">
+      <div class="full">
+        <label>Nome sulla carta</label>
+        <input type="text" id="cardName" placeholder="Mario Rossi" autocomplete="cc-name">
+      </div>
+      <div class="full">
+        <label>Numero carta</label>
+        <input type="text" inputmode="numeric" id="cardNumber" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="cc-number">
+      </div>
+      <div>
+        <label>Scadenza</label>
+        <input type="text" inputmode="numeric" id="cardExp" placeholder="MM/AA" maxlength="5" autocomplete="cc-exp">
+      </div>
+      <div>
+        <label>CVC</label>
+        <input type="text" inputmode="numeric" id="cardCvc" placeholder="123" maxlength="3" autocomplete="cc-csc">
+      </div>
+    </div>
+    <div class="disclaimer">Prototipo dimostrativo: nessun dato viene inviato o salvato. L'integrazione reale userà Stripe (PaymentIntent con cattura manuale) per l'autorizzazione carta.</div>
+    <div class="actions split">
+      <button class="btn-outline btn" id="backTo3">← Indietro</button>
+      <button class="btn" id="toStep5">Conferma appuntamento</button>
+    </div>
+  </section>
+
+  <!-- STEP 5: CONFERMA -->
+  <section class="card hidden" id="step5">
+    <div class="confirm-box">
+      <div class="confirm-avatars">
+        <svg class="mini-avatar" width="46" height="46"><use href="#av-anna"/></svg>
+        <svg class="mini-avatar" width="46" height="46"><use href="#av-luca"/></svg>
+      </div>
+      <div class="check"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M4 12l6 6L20 6"/></svg></div>
+      <h2>Appuntamento confermato!</h2>
+      <p id="confirmText" style="color:#6b5f52;font-size:14px;"></p>
+      <div class="cal-actions">
+        <button class="btn" id="addGoogleCal"><svg class="icon" style="vertical-align:-3px;margin-right:6px;"><use href="#ic-cal"/></svg>Aggiungi a Google Calendar</button>
+        <button class="btn btn-outline" id="downloadIcs"><svg class="icon" style="vertical-align:-3px;margin-right:6px;"><use href="#ic-download"/></svg>Scarica invito (.ics)</button>
+      </div>
+      <p style="margin-top:26px;font-size:13.5px;">Ti aspettiamo! Seguici intanto sui social:</p>
+      <div class="icon-links" style="justify-content:center;">
+        <a class="icon-btn" href="https://www.instagram.com/anna_e_luca_parrucchieri/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#ic-ig"/></svg></a>
+        <a class="icon-btn" href="https://www.facebook.com/anna.parrucchieri/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#ic-fb"/></svg></a>
+        <a class="icon-btn" href="tel:+390832302148" aria-label="Chiama"><svg class="icon"><use href="#ic-phone"/></svg></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="fname">Anna &amp; Luca Parrucchieri</div>
+  <div class="meta-line">Viale Lo Re 20, 73100 Lecce (LE)</div>
+  <div class="meta-line">Mar–Sab 9:00–18:00 · <a href="tel:+390832302148">0832 30 21 48</a></div>
+  <div class="meta-line"><a href="mailto:annalucaparrucchieri@hotmail.it">annalucaparrucchieri@hotmail.it</a></div>
+  <div class="icon-links">
+    <a class="icon-btn" href="https://www.instagram.com/anna_e_luca_parrucchieri/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#ic-ig"/></svg></a>
+    <a class="icon-btn" href="https://www.facebook.com/anna.parrucchieri/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#ic-fb"/></svg></a>
+    <a class="icon-btn" href="mailto:annalucaparrucchieri@hotmail.it" aria-label="Email"><svg class="icon"><use href="#ic-mail"/></svg></a>
+  </div>
+  <div style="font-size:11.5px;color:#c4baac;margin-top:6px;">Prototipo dimostrativo del prenotatore — dati e disponibilità sono simulati.</div>
+</footer>
+
+<script>
+/* ---------- CONFIGURAZIONE ---------- */
+const SERVICES = [
+  {id:'shampoo', name:'Shampoo', duration:10, price:5},
+  {id:'taglio', name:'Taglio', duration:30, price:25},
+  {id:'piega', name:'Piega', duration:25, price:20},
+  {id:'colore', name:'Colore', duration:60, price:40},
+  {id:'balayage', name:'Balayage', duration:90, price:85},
+  {id:'barba', name:'Barba', duration:15, price:12},
+  {id:'trattamento', name:'Trattamento ricostruttore', duration:20, price:18}
+];
+const STAFF = ['Anna','Luca'];
+const OPEN_HOUR = 9;   // orario apertura reale (Instagram/Facebook: 9-18 mar-sab)
+const CLOSE_HOUR = 18; // orario chiusura reale
+const CLOSED_WEEKDAYS = [0,1]; // 0=Domenica, 1=Lunedì chiuso
+const SLOT_STEP = 30;
+const DEPOSIT_RATE = 0.20;
+const SALON_ADDRESS = "Viale Lo Re 20, 73100 Lecce (LE)";
+
+/* ---------- STATO ---------- */
+let selectedServices = [];
+let staffPref = 'Indifferente';
+let daysToShow = 7;
+let chosenSlot = null;
+
+/* ---------- UTILS ---------- */
+function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0; } return h; }
+function isBlockBusy(staff, dateStr, blockIndex){ return (hashStr(staff+'|'+dateStr+'|'+blockIndex) % 100) < 35; }
+function pad(n){ return n.toString().padStart(2,'0'); }
+function dateStr(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function minToTime(min){ return pad(Math.floor(min/60))+':'+pad(min%60); }
+function totalDuration(){ return selectedServices.reduce((s,x)=>s+x.duration,0); }
+function totalPrice(){ return selectedServices.reduce((s,x)=>s+x.price,0); }
+function avatarRef(staff){ return staff==='Luca' ? '#av-luca' : '#av-anna'; }
+const DAY_NAMES = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+const MONTH_NAMES = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+
+/* ---------- RENDER SERVIZI ---------- */
+const serviceList = document.getElementById('serviceList');
+SERVICES.forEach(svc=>{
+  const el = document.createElement('div');
+  el.className = 'service';
+  el.dataset.id = svc.id;
+  el.innerHTML = `<div class="service-row"><div><div class="name">${svc.name}</div><div class="meta">${svc.duration} min</div></div></div><div style="display:flex;align-items:center;"><div class="price">€${svc.price}</div><div class="check"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L19 7"/></svg></div></div>`;
+  el.addEventListener('click', ()=>{
+    const idx = selectedServices.findIndex(s=>s.id===svc.id);
+    if(idx>-1){ selectedServices.splice(idx,1); el.classList.remove('selected'); }
+    else { selectedServices.push(svc); el.classList.add('selected'); }
+    updateSummaryBar();
+  });
+  serviceList.appendChild(el);
+});
+
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    staffPref = chip.dataset.staff;
+  });
+});
+
+function updateSummaryBar(){
+  const bar = document.getElementById('summaryBar1');
+  const btn = document.getElementById('toStep2');
+  if(selectedServices.length===0){
+    bar.innerHTML = '<span>Nessun servizio selezionato</span><span></span>';
+    btn.disabled = true;
+    return;
+  }
+  bar.innerHTML = `<span>${selectedServices.map(s=>s.name).join(' + ')} — ${totalDuration()} min</span><b>€${totalPrice()}</b>`;
+  btn.disabled = false;
+}
+
+/* ---------- GENERAZIONE SLOT ---------- */
+function findSlotsForDay(d){
+  const ds = dateStr(d);
+  const weekday = d.getDay();
+  if(CLOSED_WEEKDAYS.includes(weekday)) return [];
+  const dur = totalDuration();
+  const blocksNeeded = Math.ceil(dur/SLOT_STEP);
+  const totalBlocks = Math.floor((CLOSE_HOUR-OPEN_HOUR)*60/SLOT_STEP);
+  const staffToCheck = staffPref==='Indifferente' ? STAFF : [staffPref];
+  const found = [];
+  for(let b=0;b<=totalBlocks-blocksNeeded;b++){
+    for(const staff of staffToCheck){
+      let free = true;
+      for(let k=0;k<blocksNeeded;k++){
+        if(isBlockBusy(staff, ds, b+k)){ free=false; break; }
+      }
+      if(free){
+        const startMin = OPEN_HOUR*60 + b*SLOT_STEP;
+        found.push({date:new Date(d), staff, startMin, endMin:startMin+dur});
+        break;
+      }
+    }
+  }
+  return found;
+}
+
+function renderSlots(){
+  const container = document.getElementById('slotsContainer');
+  container.innerHTML = '';
+  const today = new Date();
+  let anySlot = false;
+  for(let i=1;i<=daysToShow;i++){
+    const d = new Date(today);
+    d.setDate(d.getDate()+i);
+    const slots = findSlotsForDay(d).slice(0,4);
+    if(slots.length===0) continue;
+    anySlot = true;
+    const group = document.createElement('div');
+    group.className = 'day-group';
+    group.innerHTML = `<h4>${DAY_NAMES[d.getDay()]} ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}</h4>`;
+    const row = document.createElement('div');
+    row.className = 'slots';
+    slots.forEach(s=>{
+      const btn = document.createElement('div');
+      btn.className = 'slot';
+      btn.innerHTML = `<svg class="mini-avatar"><use href="${avatarRef(s.staff)}"/></svg><div class="txt"><b>${minToTime(s.startMin)}</b><small>${s.staff}</small></div>`;
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.slot').forEach(x=>x.classList.remove('chosen'));
+        btn.classList.add('chosen');
+        chosenSlot = s;
+        goToStep3();
+      });
+      row.appendChild(btn);
+    });
+    group.appendChild(row);
+    container.appendChild(group);
+  }
+  if(!anySlot){
+    container.innerHTML = '<p style="color:#8a7c6c;font-size:14px;">Nessuna disponibilità nei prossimi giorni mostrati. Prova ad ampliare la ricerca.</p>';
+  }
+  const dur = totalDuration();
+  document.getElementById('assistantAvatar').querySelector('use').setAttribute('href', staffPref==='Luca' ? '#av-luca' : '#av-anna');
+  document.getElementById('assistantMsg').innerHTML =
+    `Perfetto! Hai scelto <b>${selectedServices.map(s=>s.name).join(' + ')}</b>, in totale <b>${dur} minuti</b> (€${totalPrice()}).<br>Ecco le prime date disponibili${staffPref!=='Indifferente' ? ' con '+staffPref : ''}:`;
+}
+
+document.getElementById('toStep2').addEventListener('click', ()=>{
+  daysToShow = 7;
+  showStep(2);
+  renderSlots();
+});
+document.getElementById('backTo1').addEventListener('click', ()=>showStep(1));
+document.getElementById('loadMoreDays').addEventListener('click', ()=>{
+  daysToShow += 7;
+  renderSlots();
+});
+
+/* ---------- STEP 3: RIEPILOGO ---------- */
+function goToStep3(){
+  showStep(3);
+  const s = chosenSlot;
+  const deposit = (totalPrice()*DEPOSIT_RATE).toFixed(2);
+  const recap = document.getElementById('recap');
+  recap.innerHTML = `
+    <div class="row"><span>Servizi</span><span>${selectedServices.map(x=>x.name).join(', ')}</span></div>
+    <div class="row"><span>Durata prevista</span><span>${totalDuration()} min</span></div>
+    <div class="row"><span>Data</span><span>${DAY_NAMES[s.date.getDay()]} ${s.date.getDate()} ${MONTH_NAMES[s.date.getMonth()]}, ore ${minToTime(s.startMin)}</span></div>
+    <div class="row"><span>Operatore</span><span>${s.staff}</span></div>
+    <div class="row total"><span>Totale servizio</span><span>€${totalPrice()}</span></div>
+    <div class="row"><span>Acconto richiesto ora (bloccato, non addebitato)</span><span><b>€${deposit}</b></span></div>
+  `;
+  document.getElementById('policyText').innerHTML =
+    `<b>Politica di cancellazione:</b> se annulli o modifichi l'appuntamento con almeno 24 ore di anticipo, l'importo bloccato (€${deposit}) viene rilasciato automaticamente e non ti verrà addebitato nulla. Se annulli con meno di 24 ore di anticipo, o non ti presenti, l'importo verrà addebitato come penale per la mancata presentazione.`;
+}
+document.getElementById('backTo2').addEventListener('click', ()=>showStep(2));
+document.getElementById('toStep4').addEventListener('click', ()=>showStep(4));
+document.getElementById('backTo3').addEventListener('click', ()=>showStep(3));
+
+/* ---------- STEP 4 → STEP 5 ---------- */
+document.getElementById('toStep5').addEventListener('click', ()=>{
+  showStep(5);
+  const s = chosenSlot;
+  const deposit = (totalPrice()*DEPOSIT_RATE).toFixed(2);
+  document.getElementById('confirmText').innerHTML =
+    `${selectedServices.map(x=>x.name).join(' + ')} con <b>${s.staff}</b><br>${DAY_NAMES[s.date.getDay()]} ${s.date.getDate()} ${MONTH_NAMES[s.date.getMonth()]}, ore ${minToTime(s.startMin)}<br>Acconto bloccato: €${deposit}`;
+});
+
+/* ---------- CALENDARIO: Google Calendar + .ics ---------- */
+function buildEventData(){
+  const s = chosenSlot;
+  const start = new Date(s.date);
+  start.setHours(Math.floor(s.startMin/60), s.startMin%60, 0, 0);
+  const end = new Date(s.date);
+  end.setHours(Math.floor(s.endMin/60), s.endMin%60, 0, 0);
+  const fmt = (d)=> d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'T'+pad(d.getHours())+pad(d.getMinutes())+'00';
+  const title = `Appuntamento Anna & Luca — ${selectedServices.map(x=>x.name).join(' + ')}`;
+  const details = `Prenotazione presso Anna & Luca Parrucchieri con ${s.staff}. Servizi: ${selectedServices.map(x=>x.name).join(', ')}.`;
+  return { title, details, location: SALON_ADDRESS, startStr: fmt(start), endStr: fmt(end) };
+}
+
+document.getElementById('addGoogleCal').addEventListener('click', ()=>{
+  const e = buildEventData();
+  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.title)}&dates=${e.startStr}/${e.endStr}&details=${encodeURIComponent(e.details)}&location=${encodeURIComponent(e.location)}`;
+  window.open(url, '_blank');
+});
+
+document.getElementById('downloadIcs').addEventListener('click', ()=>{
+  const e = buildEventData();
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Anna e Luca Parrucchieri//Prenotatore//IT','BEGIN:VEVENT',
+    'UID:'+Date.now()+'@annaeluca-salone', 'DTSTAMP:'+e.startStr,
+    'DTSTART:'+e.startStr, 'DTEND:'+e.endStr,
+    'SUMMARY:'+e.title, 'DESCRIPTION:'+e.details, 'LOCATION:'+e.location,
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], {type:'text/calendar'});
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'appuntamento-anna-luca.ics';
+  link.click();
+});
+
+/* ---------- NAVIGAZIONE STEP ---------- */
+function showStep(n){
+  [1,2,3,4,5].forEach(i=>{
+    document.getElementById('step'+i).classList.toggle('hidden', i!==n);
+  });
+  renderStepsNav(n);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function renderStepsNav(active){
+  const nav = document.getElementById('stepsNav');
+  nav.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const dot = document.createElement('span');
+    if(i===active) dot.classList.add('active');
+    nav.appendChild(dot);
+  }
+}
+renderStepsNav(1);
+</script>
+</body>
+</html>

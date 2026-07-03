@@ -1,0 +1,149 @@
+/* ===========================================================
+   Anna & Luca Parrucchieri — Gestionale /gestionale
+   Riusa le variabili colore/tipografia di style.css
+   =========================================================== */
+
+body.admin-body{background:var(--cream);}
+
+/* ---------- LOGIN ---------- */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 28px;max-width:360px;width:100%;box-shadow:0 8px 30px rgba(63,61,57,.08);text-align:center;}
+.login-card .mono-badge{width:56px;height:56px;font-size:20px;margin:0 auto 16px;}
+.login-card .mono-badge .amp{font-size:30px;}
+.login-card h1{font-size:19px;margin-bottom:4px;}
+.login-card p{font-size:13px;margin-bottom:22px;}
+.login-card .form-grid{text-align:left;margin-bottom:18px;}
+.login-error{color:var(--err);font-size:13px;margin-top:-6px;margin-bottom:12px;display:none;}
+.login-error.show{display:block;}
+.login-hint{font-size:11.5px;color:#a99e90;margin-top:16px;line-height:1.5;}
+
+/* ---------- APP SHELL ---------- */
+.admin-app{display:none;min-height:100vh;flex-direction:column;}
+.admin-app.show{display:flex;}
+.admin-topbar{background:var(--charcoal);color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.admin-topbar .brand-mini{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;}
+.admin-topbar .mono-badge{width:32px;height:32px;font-size:12px;background:#fff;}
+.admin-topbar .mono-badge .amp{font-size:18px;}
+.admin-logout{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:20px;padding:7px 14px;font-size:12.5px;cursor:pointer;font-family:'Baloo 2',sans-serif;}
+.admin-logout:hover{background:rgba(255,255,255,.12);}
+
+.admin-body-wrap{display:flex;flex:1;min-height:0;}
+.admin-sidebar{background:#fff;width:100%;display:flex;}
+.admin-nav-item{flex:1;text-align:center;padding:10px 4px 8px;font-size:11px;font-weight:600;color:var(--charcoal-soft);cursor:pointer;white-space:normal;line-height:1.25;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:56px;border-radius:12px;transition:.15s;}
+.admin-nav-item .icon{width:20px;height:20px;flex-shrink:0;}
+.admin-nav-item.active{color:var(--orange);background:var(--cream);}
+.admin-main{flex:1;padding:18px 14px 96px;max-width:1100px;margin:0 auto;width:100%;}
+
+/* Mobile: barra di navigazione fissa in basso, come un'app */
+@media (max-width:859px){
+  .admin-sidebar{position:fixed;bottom:0;left:0;right:0;z-index:60;border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(63,61,57,.08);padding:6px 6px calc(6px + var(--safe-b));gap:4px;}
+  .admin-nav-item{border-radius:10px;}
+}
+
+@media (min-width:860px){
+  .admin-body-wrap{max-width:1200px;margin:0 auto;width:100%;}
+  .admin-sidebar{width:220px;flex-direction:column;border-right:1px solid var(--line);flex:0 0 220px;padding:20px 12px;gap:4px;align-items:stretch;}
+  .admin-nav-item{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;padding:12px 16px;border-radius:12px;text-align:left;font-size:14px;min-height:auto;}
+  .admin-main{padding:28px 32px 60px;}
+}
+
+.admin-view{display:none;}
+.admin-view.active{display:block;}
+.admin-view-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+.admin-view-head h2{font-size:21px;margin:0;}
+.admin-view-head p{margin:4px 0 0;font-size:13.5px;}
+
+/* ---------- TABELLE ---------- */
+.admin-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#fff;}
+table.admin-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px;}
+table.admin-table th{text-align:left;padding:12px 14px;background:var(--cream);color:var(--charcoal-soft);font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+table.admin-table td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top;}
+table.admin-table tr:hover td{background:#fdfaf6;}
+.admin-empty{padding:30px 16px;text-align:center;color:var(--charcoal-soft);font-size:14px;}
+
+.status-select{border:1.5px solid var(--line);border-radius:20px;padding:6px 10px;font-size:12.5px;font-family:'Baloo 2',sans-serif;background:#fff;color:var(--charcoal);}
+.status-select.st-nuova{border-color:var(--orange);color:var(--orange);}
+.status-select.st-confermata{border-color:var(--teal);color:var(--teal);}
+.status-select.st-completata{border-color:var(--charcoal-soft);color:var(--charcoal-soft);}
+.status-select.st-cancellata{border-color:var(--err);color:var(--err);}
+
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;background:var(--cream);}
+.pill.st-nuova{background:#FCEEE3;color:var(--orange);}
+.pill.st-confermata{background:#E6EFEC;color:var(--teal);}
+.pill.st-completata{background:var(--cream);color:var(--charcoal-soft);}
+.pill.st-cancellata{background:#F1E4E2;color:var(--err);}
+.note-cell{max-width:220px;font-size:12.5px;color:var(--charcoal-soft);}
+
+/* ---------- CARD PRENOTAZIONI ESPANDIBILI ---------- */
+.booking-list{display:flex;flex-direction:column;gap:10px;}
+.booking-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.booking-summary{width:100%;background:none;border:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-family:'Baloo 2',sans-serif;}
+.bs-main{min-width:0;}
+.bs-date{font-size:12.5px;color:var(--charcoal-soft);font-weight:600;}
+.bs-date span{color:var(--charcoal-soft);}
+.bs-name{font-size:16px;font-weight:700;color:var(--charcoal);margin-top:1px;}
+.bs-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.chevron{color:var(--charcoal-soft);transition:transform .2s ease;flex-shrink:0;}
+.booking-card.open .chevron{transform:rotate(180deg);}
+.booking-details{display:none;padding:2px 16px 16px;border-top:1px solid var(--line);}
+.booking-card.open .booking-details{display:block;padding-top:12px;}
+.booking-details .status-select{margin-top:2px;}
+
+/* Sotto i 700px le tabelle diventano card impilate invece di scorrere in orizzontale */
+@media (max-width:700px){
+  .admin-table-wrap{border:none;background:none;overflow-x:visible;}
+  table.admin-table{min-width:0;}
+  table.admin-table thead{display:none;}
+  table.admin-table tr{display:block;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 14px;margin-bottom:10px;}
+  table.admin-table td{display:block;padding:8px 0;border-top:1px solid var(--line);}
+  table.admin-table td:first-child{border-top:none;}
+  table.admin-table td::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--charcoal-soft);margin-bottom:3px;}
+}
+
+/* ---------- FILTRO OPERATORE (Calendario) ---------- */
+.staff-filter{display:flex;gap:8px;margin-bottom:18px;}
+.chip-filter{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:8px 16px;font-size:13.5px;font-weight:600;color:var(--charcoal-soft);cursor:pointer;font-family:'Baloo 2',sans-serif;}
+.chip-filter.active{background:var(--charcoal);color:#fff;border-color:var(--charcoal);}
+
+/* ---------- AGENDA / CALENDARIO ---------- */
+.agenda-day{margin-bottom:18px;}
+.agenda-day h4{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--charcoal-soft);margin-bottom:8px;}
+.agenda-empty{font-size:13px;color:#b5aa9c;padding:10px 14px;border:1px dashed var(--line);border-radius:12px;}
+.agenda-item{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:8px;}
+.agenda-item .time{font-weight:700;font-size:14px;min-width:48px;}
+.agenda-item .who{font-size:11.5px;padding:3px 9px;border-radius:20px;color:#fff;flex-shrink:0;}
+.agenda-item .who.Anna{background:var(--orange);}
+.agenda-item .who.Luca{background:var(--teal);}
+.agenda-item .info{flex:1;font-size:13px;}
+.agenda-item .info small{display:block;color:var(--charcoal-soft);font-size:11.5px;}
+
+/* ---------- PRODOTTI ---------- */
+.stock-controls{display:flex;align-items:center;gap:8px;}
+.stock-btn{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;}
+.stock-btn:hover{background:var(--cream);}
+.stock-low{color:var(--err);font-weight:700;}
+
+/* ---------- FERIE ---------- */
+.ferie-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+.ferie-item{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;}
+.ferie-item .d{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ferie-item .n{font-size:12.5px;color:var(--charcoal-soft);margin-top:3px;}
+.ferie-item .del{background:none;border:none;color:var(--err);cursor:pointer;font-size:13px;font-weight:600;flex-shrink:0;}
+.pill.chi-Anna{background:#FCEEE3;color:var(--orange);}
+.pill.chi-Luca{background:#E6EFEC;color:var(--teal);}
+.pill.chi-Tutti{background:#F1E4E2;color:var(--err);}
+
+/* ---------- REPORT ---------- */
+.report-num{font-size:26px;font-weight:800;color:var(--charcoal);line-height:1.2;}
+.report-lbl{font-size:12.5px;color:var(--charcoal-soft);margin-top:4px;}
+.report-note{font-size:11.5px;color:#a99e90;margin-top:18px;line-height:1.5;}
+
+.inline-form{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px;}
+.inline-form .field{flex:1;min-width:140px;}
+.inline-form label{display:block;font-size:11.5px;color:var(--charcoal-soft);margin-bottom:4px;font-weight:600;}
+.inline-form input, .inline-form select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:16px;font-family:'Baloo 2',sans-serif;}
+@media (max-width:600px){
+  .inline-form{padding:14px;}
+  .inline-form .field{flex:1 1 100%;min-width:0;}
+  .inline-form button{width:100%;}
+}
