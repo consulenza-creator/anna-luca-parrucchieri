@@ -4,7 +4,8 @@
    charcoal #3F3D39 · orange #E17F43 · teal #2E5B52 · sage #A9C5B7 · cream #F4EDE6
    =========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
+/* Font Fraunces+Inter caricati via <link> nell'<head> di ogni pagina HTML
+   (non più @import qui: evita una richiesta bloccante in cascata). */
 
 :root{
   --charcoal:#3F3D39;
