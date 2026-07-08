@@ -39,8 +39,6 @@ let daysToShow = 7;
 let chosenSlot = null;
 
 /* ---------- UTILS ---------- */
-function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0; } return h; }
-function isBlockBusy(staff, dateStr, blockIndex){ return (hashStr(staff+'|'+dateStr+'|'+blockIndex) % 100) < 35; }
 function pad(n){ return n.toString().padStart(2,'0'); }
 function dateStr(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
 function minToTime(min){ return pad(Math.floor(min/60))+':'+pad(min%60); }
@@ -86,7 +84,7 @@ function updateSummaryBar(){
   btn.disabled = false;
 }
 
-/* ---------- GENERAZIONE SLOT ---------- */
+/* ---------- GENERAZIONE SLOT (disponibilità reale da Firestore) ---------- */
 function findSlotsForDay(d){
   const ds = dateStr(d);
   const weekday = d.getDay();
@@ -98,19 +96,13 @@ function findSlotsForDay(d){
   if(STAFF.every(s=>offToday.includes(s))) return [];
 
   const dur = totalDuration();
-  const blocksNeeded = Math.ceil(dur/SLOT_STEP);
-  const totalBlocks = Math.floor((CLOSE_HOUR-OPEN_HOUR)*60/SLOT_STEP);
+  const openMin = OPEN_HOUR*60, closeMin = CLOSE_HOUR*60;
   const staffToCheck = (staffPref==='Indifferente' ? STAFF : [staffPref]).filter(s=> !offToday.includes(s));
   if(staffToCheck.length===0) return [];
   const found = [];
-  for(let b=0;b<=totalBlocks-blocksNeeded;b++){
+  for(let startMin=openMin; startMin+dur<=closeMin; startMin+=SLOT_STEP){
     for(const staff of staffToCheck){
-      let free = true;
-      for(let k=0;k<blocksNeeded;k++){
-        if(isBlockBusy(staff, ds, b+k)){ free=false; break; }
-      }
-      if(free){
-        const startMin = OPEN_HOUR*60 + b*SLOT_STEP;
+      if(isSlotFree(staff, ds, startMin, startMin+dur)){
         found.push({date:new Date(d), staff, startMin, endMin:startMin+dur});
         break;
       }
@@ -276,6 +268,34 @@ db.collection('ferie').onSnapshot(snap=>{
 });
 function getFerieMap(){
   return ferieMapCache;
+}
+
+/* ---------- PRENOTAZIONI ESISTENTI: disponibilità reale (anti doppia prenotazione) ----------
+   Letta in tempo reale da Firestore, a partire da oggi, per non proporre più ai
+   clienti orari già occupati da un'altra prenotazione confermata o da confermare. */
+let prenotazioniMapCache = {}; // { 'YYYY-MM-DD': { Anna: [{start,end}], Luca: [{start,end}] } }
+db.collection('prenotazioni')
+  .where('dataISO', '>=', dateStr(new Date()))
+  .onSnapshot(snap=>{
+    const map = {};
+    snap.docs.forEach(doc=>{
+      const b = doc.data();
+      if(b.stato === 'Cancellata') return;
+      if(!b.dataISO || !b.ora || !b.operatore || !b.durata) return;
+      const [hh, mm] = b.ora.split(':').map(Number);
+      const start = hh*60 + mm;
+      const end = start + Number(b.durata);
+      if(!map[b.dataISO]) map[b.dataISO] = {};
+      if(!map[b.dataISO][b.operatore]) map[b.dataISO][b.operatore] = [];
+      map[b.dataISO][b.operatore].push({start, end});
+    });
+    prenotazioniMapCache = map;
+  }, err=>{
+    console.warn('Impossibile leggere le prenotazioni esistenti da Firebase (la disponibilità mostrata potrebbe non essere accurata):', err);
+  });
+function isSlotFree(staff, ds, startMin, endMin){
+  const existing = (prenotazioniMapCache[ds] && prenotazioniMapCache[ds][staff]) || [];
+  return !existing.some(b => startMin < b.end && endMin > b.start);
 }
 
 /* ---------- CALENDARIO: Google Calendar + .ics ---------- */
