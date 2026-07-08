@@ -240,13 +240,26 @@ function sendBookingToGestionale(payload){
 
 /* ---------- SALVATAGGIO SU FIRESTORE (condiviso con il gestionale) ----------
    La prenotazione scritta qui appare subito, in tempo reale, nel
-   pannello /gestionale di Anna e Luca su qualsiasi dispositivo. */
+   pannello /gestionale di Anna e Luca su qualsiasi dispositivo.
+   Scrive anche una copia "senza dati personali" in disponibilita/{stesso id},
+   che è l'unica collezione leggibile pubblicamente per calcolare gli slot
+   liberi (i clienti non autenticati non possono leggere nome/telefono/email
+   delle altre prenotazioni). */
 function saveBookingToFirebase(payload){
-  db.collection('prenotazioni').add(Object.assign({
+  const ref = db.collection('prenotazioni').doc();
+  ref.set(Object.assign({
     ricevutaIl: new Date().toISOString(),
     stato: 'Da confermare'
   }, payload)).catch(err=>{
     console.warn('Impossibile salvare la prenotazione su Firebase (la prenotazione resta comunque confermata lato cliente):', err);
+  });
+  db.collection('disponibilita').doc(ref.id).set({
+    dataISO: payload.dataISO,
+    ora: payload.ora,
+    operatore: payload.operatore,
+    durata: payload.durata
+  }).catch(err=>{
+    console.warn('Impossibile aggiornare la disponibilità pubblica su Firebase:', err);
   });
 }
 
@@ -270,17 +283,19 @@ function getFerieMap(){
   return ferieMapCache;
 }
 
-/* ---------- PRENOTAZIONI ESISTENTI: disponibilità reale (anti doppia prenotazione) ----------
-   Letta in tempo reale da Firestore, a partire da oggi, per non proporre più ai
-   clienti orari già occupati da un'altra prenotazione confermata o da confermare. */
+/* ---------- DISPONIBILITÀ REALE (anti doppia prenotazione) ----------
+   Letta in tempo reale dalla collezione pubblica "disponibilita" (senza dati
+   personali, vedi saveBookingToFirebase), a partire da oggi, per non proporre
+   più ai clienti orari già occupati da un'altra prenotazione. Quando Anna o
+   Luca cancellano una prenotazione dal gestionale, il documento corrispondente
+   qui viene eliminato e lo slot torna libero. */
 let prenotazioniMapCache = {}; // { 'YYYY-MM-DD': { Anna: [{start,end}], Luca: [{start,end}] } }
-db.collection('prenotazioni')
+db.collection('disponibilita')
   .where('dataISO', '>=', dateStr(new Date()))
   .onSnapshot(snap=>{
     const map = {};
     snap.docs.forEach(doc=>{
       const b = doc.data();
-      if(b.stato === 'Cancellata') return;
       if(!b.dataISO || !b.ora || !b.operatore || !b.durata) return;
       const [hh, mm] = b.ora.split(':').map(Number);
       const start = hh*60 + mm;
@@ -291,7 +306,7 @@ db.collection('prenotazioni')
     });
     prenotazioniMapCache = map;
   }, err=>{
-    console.warn('Impossibile leggere le prenotazioni esistenti da Firebase (la disponibilità mostrata potrebbe non essere accurata):', err);
+    console.warn('Impossibile leggere la disponibilità da Firebase (la disponibilità mostrata potrebbe non essere accurata):', err);
   });
 function isSlotFree(staff, ds, startMin, endMin){
   const existing = (prenotazioniMapCache[ds] && prenotazioniMapCache[ds][staff]) || [];

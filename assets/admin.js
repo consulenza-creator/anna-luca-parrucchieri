@@ -144,6 +144,12 @@ function renderPrenotazioni(){
     sel.addEventListener('change', ()=>{
       db.collection('prenotazioni').doc(sel.dataset.id).update({ stato: sel.value })
         .catch(err=> console.error('Errore aggiornamento stato:', err));
+      // Se viene cancellata, libera lo slot anche nella disponibilità
+      // pubblica (stesso id), così il sito torna a proporlo ai clienti.
+      if(sel.value === 'Cancellata'){
+        db.collection('disponibilita').doc(sel.dataset.id).delete()
+          .catch(err=> console.error('Errore liberazione slot disponibilità:', err));
+      }
     });
   });
 }
